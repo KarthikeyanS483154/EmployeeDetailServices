@@ -13,23 +13,22 @@ package com.az.employee.service;
 
 import java.util.List;
 
-import com.az.employee.model.CustomResponse;
 import com.az.employee.model.Employee;
 
 public interface EmployeeService {
 
 	// Add employee abstract method which contains no implementation
-	public abstract CustomResponse addEmployee(Employee employee) throws Exception;
+	public abstract void addEmployee(Employee employee) throws Exception;
 
 	// Update employee abstract method which contains no implementation
-	public abstract CustomResponse updateEmployee(Employee employees) throws Exception;
+	public abstract void updateEmployee(Employee employees) throws Exception;
 
 	// Delete employee abstract method which contains no implementation
-	public abstract CustomResponse deleteEmployee(String employeeId) throws Exception;
+	public abstract void deleteEmployee(String employeeId) throws Exception;
 
 	// Employee List abstract method which contains no implementation
 	public abstract List<Employee> getEmployees() throws Exception;
 
 	// Employee Details abstract method which contains no implementation
-	public abstract CustomResponse getEmployee(String employeeId) throws Exception;
+	public abstract Employee getEmployee(String employeeId) throws Exception;
 }

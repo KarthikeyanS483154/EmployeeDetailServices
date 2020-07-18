@@ -11,22 +11,9 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class CustomResponse {
-
-	private boolean success;
 	private String message;
 	private Employee employee;
-	/**
-	 * @return the success
-	 */
-	public boolean isSuccess() {
-		return success;
-	}
-	/**
-	 * @param success the success to set
-	 */
-	public void setSuccess(boolean success) {
-		this.success = success;
-	}
+	
 	/**
 	 * @return the message
 	 */

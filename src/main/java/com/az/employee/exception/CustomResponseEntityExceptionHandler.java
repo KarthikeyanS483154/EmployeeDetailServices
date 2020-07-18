@@ -30,13 +30,13 @@ public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptio
 	 * This method handles application default exception and returns custom error with proper
 	 * HTTP status
 	 * 
-	 * @param ex - Exception
+	 * @param exception - Exception
 	 * @param request - Web request
 	 * @return - Response entity of exception response
 	 */
 	@ExceptionHandler(Exception.class)
-	public final ResponseEntity<ExceptionResponse> handleAllException(Exception ex, WebRequest request) {
-		ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), ex.getMessage(),
+	public final ResponseEntity<ExceptionResponse> handleAllException(Exception exception, WebRequest request) {
+		ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), exception.getMessage(),
 				request.getDescription(false));
 		return new ResponseEntity<>(exceptionResponse, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
@@ -45,13 +45,13 @@ public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptio
 	 * This method handles application custom exception and returns custom error with 
 	 * HTTP NOT_FOUND status code
 	 * 
-	 * @param ex - Exception
+	 * @param exception - Exception
 	 * @param request - Web request
 	 * @return - Response entity of exception response
 	 */
 	@ExceptionHandler(EmployeeNotFoundException.class)
-	public final ResponseEntity<ExceptionResponse> handleEmployeeNotFoundException(Exception ex, WebRequest request) {
-		ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), ex.getMessage(),
+	public final ResponseEntity<ExceptionResponse> handleEmployeeNotFoundException(Exception exception, WebRequest request) {
+		ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), exception.getMessage(),
 				request.getDescription(false));
 		return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
 	}

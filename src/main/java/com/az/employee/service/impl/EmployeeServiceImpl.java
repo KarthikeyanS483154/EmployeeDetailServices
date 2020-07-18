@@ -21,7 +21,6 @@ import org.springframework.stereotype.Service;
 import com.az.employee.adapter.EmployeeDataAdapter;
 import com.az.employee.entity.EmployeeEntity;
 import com.az.employee.exception.EmployeeNotFoundException;
-import com.az.employee.model.CustomResponse;
 import com.az.employee.model.Employee;
 import com.az.employee.repository.EmployeeRepository;
 import com.az.employee.service.EmployeeService;
@@ -48,8 +47,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 	 * database with using employee repository
 	 */
 	@Override
-	public CustomResponse addEmployee(Employee employee) throws Exception {
-		CustomResponse customResponse = new CustomResponse();
+	public void addEmployee(Employee employee) throws Exception {
 		try {
 			EmployeeEntity employeeEntity = employeeRepo.findTopByOrderByIdDesc();
 			String employeeId = AppConstants.EMPLOYEEID_PREFIX + AppConstants.INIT_VAL;
@@ -61,11 +59,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 			}
 			EmployeeEntity empEntity = new EmployeeEntity();
 			employeeRepo.save(employeeDataAdapter.getEmployeeEntity(empEntity, employeeId, employee));
-			customResponse.setSuccess(true);
-		} catch (Exception e) {
-			throw new Exception(e.getMessage());
+		} catch (Exception exception) {
+			throw new Exception(exception.getMessage());
 		}
-		return customResponse;
 	}
 
 	/**
@@ -73,8 +69,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 	 * database with using employee repository
 	 */
 	@Override
-	public CustomResponse updateEmployee(Employee employees) throws Exception {
-		CustomResponse customResponse = new CustomResponse();
+	public void updateEmployee(Employee employees) throws Exception {
 		try {
 			if (!appUtils.isNullorEmpty(employees.getEmployeeId()))
 				throw new EmployeeNotFoundException("Employee id not found");
@@ -84,13 +79,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 			if (empEntity == null) {
 				throw new EmployeeNotFoundException("Employee not found for this id " + employees.getEmployeeId());
 			}
-			
+
 			employeeRepo.save(employeeDataAdapter.getEmployeeEntity(empEntity, employees.getEmployeeId(), employees));
-			customResponse.setSuccess(true);
-		} catch (Exception e) {
-			throw new Exception(e.getMessage());
+		} catch (Exception exception) {
+			throw new Exception(exception.getMessage());
 		}
-		return customResponse;
 	}
 
 	/**
@@ -98,8 +91,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 	 * database with using employee repository
 	 */
 	@Override
-	public CustomResponse deleteEmployee(String employeeId) throws Exception {
-		CustomResponse customResponse = new CustomResponse();
+	public void deleteEmployee(String employeeId) throws Exception {
 		try {
 			if (!appUtils.isNullorEmpty(employeeId))
 				throw new Exception("Employee id not found");
@@ -110,11 +102,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 				throw new EmployeeNotFoundException("Employee not found for this id " + employeeId);
 			}
 			employeeRepo.deleteById(empEntity.getId());
-			customResponse.setSuccess(true);
-		} catch (Exception e) {
-			throw new Exception(e.getMessage());
+		} catch (Exception exception) {
+			throw new Exception(exception.getMessage());
 		}
-		return customResponse;
 	}
 
 	/**
@@ -138,18 +128,17 @@ public class EmployeeServiceImpl implements EmployeeService {
 	 * database with using employee repository
 	 */
 	@Override
-	public CustomResponse getEmployee(String employeeId) throws Exception {
-		CustomResponse customResponse = new CustomResponse();
+	public Employee getEmployee(String employeeId) throws Exception {
+		Employee employee = new Employee();
 		try {
 			EmployeeEntity employeeEntity = employeeRepo.findByEmployeeId(employeeId);
 			if (employeeEntity == null) {
 				throw new EmployeeNotFoundException("Employee not found for this id " + employeeId);
 			}
-			customResponse.setSuccess(true);
-			customResponse.setEmployee(employeeDataAdapter.getEmployee(employeeEntity));
-		} catch (Exception e) {
-			throw new Exception(e.getMessage());
+			employee = employeeDataAdapter.getEmployee(employeeEntity);
+		} catch (Exception exception) {
+			throw new Exception(exception.getMessage());
 		}
-		return customResponse;
+		return employee;
 	}
 }

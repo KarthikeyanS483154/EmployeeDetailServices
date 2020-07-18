@@ -3,19 +3,10 @@
  */
 package com.az.employee;
 
-/**
- * @author Karthikeyan 17/07/2020
- * @version 1.0
- *
- * This class used to test individual code components.
- */
-
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.json.JSONException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
@@ -86,7 +77,6 @@ public class EmployeeControllerTest {
 	@Test
 	public void getEmployee() throws Exception {
 		CustomResponse customResponse = new CustomResponse();
-		customResponse.setSuccess(true);
 		customResponse.setEmployee(employee);
 
 		Mockito.when(employeeRepo.findByEmployeeId(TestConstants.TestEmployeeID)).thenReturn(employeeEntity);
@@ -103,32 +93,20 @@ public class EmployeeControllerTest {
 
 	@Test
 	public void addEmployee() throws Exception {
-		try {
-			Employee employee = this.employee;
-			employee.setEmployeeId(null); // New Request will not have employee ID
-			String request = gsonBuilder.toJson(employee);
-			CustomResponse customResponse = new CustomResponse();
-			customResponse.setSuccess(true);
+		Employee employee = this.employee;
+		employee.setEmployeeId(null); // New Request will not have employee ID
+		String request = gsonBuilder.toJson(employee);
+		CustomResponse customResponse = new CustomResponse();
+		customResponse.setEmployee(employee);
+		Mockito.when(employeeRepo.findTopByOrderByIdDesc()).thenReturn(employeeEntity);
+		RequestBuilder requestBuilder = MockMvcRequestBuilders.post(TestConstants.TestUrlParam2)
+				.accept(MediaType.APPLICATION_JSON).content(request).contentType(MediaType.APPLICATION_JSON);
 
-			Mockito.when(employeeRepo.findTopByOrderByIdDesc()).thenReturn(employeeEntity);
-			RequestBuilder requestBuilder = MockMvcRequestBuilders.post(TestConstants.TestUrlParam2)
-					.accept(MediaType.APPLICATION_JSON).content(request).contentType(MediaType.APPLICATION_JSON);
+		MvcResult result = mockMvc.perform(requestBuilder).andReturn();
 
-			MvcResult result = mockMvc.perform(requestBuilder).andReturn();
+		String expected = gsonBuilder.toJson(customResponse);
 
-			String expected = gsonBuilder.toJson(customResponse);
-
-			JSONAssert.assertEquals(expected, result.getResponse().getContentAsString(), false);
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		JSONAssert.assertEquals(expected, result.getResponse().getContentAsString(), false);
 	}
 
 	@Test
@@ -137,8 +115,7 @@ public class EmployeeControllerTest {
 		employee.setFirstName("Charles");
 		String request = gsonBuilder.toJson(employee);
 		CustomResponse customResponse = new CustomResponse();
-		customResponse.setSuccess(true);
-
+		customResponse.setEmployee(employee);
 		Mockito.when(employeeRepo.findByEmployeeId(TestConstants.TestEmployeeID)).thenReturn(employeeEntity);
 
 		RequestBuilder requestBuilder = MockMvcRequestBuilders.put(TestConstants.TestUrlParam2)
@@ -154,8 +131,7 @@ public class EmployeeControllerTest {
 	@Test
 	public void deleteEmployee() throws Exception {
 		CustomResponse customResponse = new CustomResponse();
-		customResponse.setSuccess(true);
-
+		customResponse.setEmployee(employee);
 		Mockito.when(employeeRepo.findByEmployeeId(TestConstants.TestEmployeeID)).thenReturn(employeeEntity);
 		RequestBuilder requestBuilder = MockMvcRequestBuilders.delete(TestConstants.TestUrlParam1)
 				.accept(MediaType.APPLICATION_JSON);

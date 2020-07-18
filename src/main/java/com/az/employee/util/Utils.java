@@ -92,8 +92,7 @@ public class Utils {
 	 * @return - true/false
 	 */
 	public boolean isValidEmail(String emailId) throws Exception {
-		String emailRegex = "[a-zA-Z_0-9.]{1,100}[@]{1}[a-zA-Z]{1,100}[.]{1}[a-zA-Z0-9]{2,5}";
-		Pattern patttern = Pattern.compile(emailRegex);
+		Pattern patttern = Pattern.compile(AppConstants.EMAIL_PATTERN);
 		boolean isMatch = patttern.matcher(emailId).matches();
 		if (!isMatch)
 			throw new Exception("Email must be a valid address");
@@ -107,8 +106,7 @@ public class Utils {
 	 * @return - true/false
 	 */
 	public boolean isValidPhoneNumber(String phoneNumber) throws Exception {
-		String emailRegex = "[0-9+ \\-()]{10,14}";
-		Pattern patttern = Pattern.compile(emailRegex);
+		Pattern patttern = Pattern.compile(AppConstants.PHONE_NUMBER_PATTERN);
 		boolean isMatch = patttern.matcher(phoneNumber).matches();
 		if (!isMatch)
 			throw new Exception("Phone must be a valid number");

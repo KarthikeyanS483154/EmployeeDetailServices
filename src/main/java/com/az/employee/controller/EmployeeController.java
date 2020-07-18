@@ -23,19 +23,21 @@ import org.springframework.web.bind.annotation.RestController;
 import com.az.employee.model.CustomResponse;
 import com.az.employee.model.Employee;
 import com.az.employee.service.EmployeeService;
+import com.az.employee.util.AppConstants;
 
 @RestController
 @CrossOrigin
 public class EmployeeController {
 
-	//EmployeeService class injection object
+	// EmployeeService class injection object
 	@Autowired
 	private EmployeeService employeeService;
 
 	/**
-	 * This is the "GET" method request is used to retrieve information
-	 * from the given request mapping value using a Entity object and returns custom response with 
-	 * success data if HttpStatus.OK or else it will throw Exception with proper error message
+	 * This is the "GET" method request is used to retrieve information from the
+	 * given request mapping value using a Entity object and returns custom response
+	 * with success data if HttpStatus.OK or else it will throw Exception with
+	 * proper error message
 	 * 
 	 * @return - List of employee response entity
 	 * @throws Exception - General exception with handled HTTP error
@@ -47,53 +49,68 @@ public class EmployeeController {
 
 	/**
 	 * This is the "GET" method request is used to retrieve particular information
-	 * from the given request mapping value and returns custom response with success data if HttpStatus.OK
-	 * or else it will throw Exception with proper error message
+	 * from the given request mapping value and returns custom response with success
+	 * data if HttpStatus.OK or else it will throw Exception with proper error
+	 * message
 	 * 
 	 * @return - Custom response with success data
 	 * @throws Exception - General exception with handled HTTP error
 	 */
 	@RequestMapping(value = "/employees/{employeeId}", method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<CustomResponse> getEmployee(@PathVariable String employeeId) throws Exception {
-		return new ResponseEntity<CustomResponse>(employeeService.getEmployee(employeeId), HttpStatus.OK);
+		CustomResponse customResponse = new CustomResponse();
+		customResponse.setEmployee(employeeService.getEmployee(employeeId));
+		return new ResponseEntity<CustomResponse>(customResponse, HttpStatus.OK);
 	}
 
 	/**
-	 * This is the "POST" method request is used to store information
-	 * for the given request mapping value and returns custom response with success data if HttpStatus.OK
-	 * or else it will throw Exception with proper error message
+	 * This is the "POST" method request is used to store information for the given
+	 * request mapping value and returns custom response with success data if
+	 * HttpStatus.OK or else it will throw Exception with proper error message
 	 * 
 	 * @return - Custom response with success data
 	 * @throws Exception - General exception with handled HTTP error
 	 */
 	@RequestMapping(value = "/employees", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
 	public ResponseEntity<CustomResponse> addEmployee(@RequestBody Employee employee) throws Exception {
-		return new ResponseEntity<CustomResponse>(employeeService.addEmployee(employee), HttpStatus.OK);
+		employeeService.addEmployee(employee);
+		CustomResponse customResponse = new CustomResponse();
+		customResponse.setEmployee(employee);
+		customResponse.setMessage(AppConstants.SUCCESS_MSG);
+		return new ResponseEntity<CustomResponse>(customResponse, HttpStatus.OK);
 	}
 
 	/**
-	 * This is the "PUT" method request is used to update information
-	 * for the given request mapping value and returns custom response with success data if HttpStatus.OK
-	 * or else it will throw Exception with proper error message
+	 * This is the "PUT" method request is used to update information for the given
+	 * request mapping value and returns custom response with success data if
+	 * HttpStatus.OK or else it will throw Exception with proper error message
 	 * 
 	 * @return - Custom response with success data
 	 * @throws Exception - General exception with handled HTTP error
 	 */
 	@RequestMapping(value = "/employees", method = RequestMethod.PUT, consumes = "application/json", produces = "application/json")
 	public ResponseEntity<CustomResponse> updateEmployee(@RequestBody Employee employee) throws Exception {
-		return new ResponseEntity<CustomResponse>(employeeService.updateEmployee(employee), HttpStatus.OK);
+		employeeService.updateEmployee(employee);
+		CustomResponse customResponse = new CustomResponse();
+		customResponse.setEmployee(employee);
+		customResponse.setMessage(AppConstants.SUCCESS_MSG);
+		return new ResponseEntity<CustomResponse>(customResponse, HttpStatus.OK);
 	}
 
 	/**
-	 * This is the "PUT" method request is used to delete information
-	 * for the given request mapping value and returns custom response with success data if HttpStatus.OK
-	 * or else it will throw Exception with proper error message
+	 * This is the "PUT" method request is used to delete information for the given
+	 * request mapping value and returns custom response with success data if
+	 * HttpStatus.OK or else it will throw Exception with proper error message
 	 * 
 	 * @return - Custom response with success data
 	 * @throws Exception - General exception with handled HTTP error
 	 */
 	@RequestMapping(value = "/employees/{employeeId}", method = RequestMethod.DELETE, produces = "application/json")
 	public ResponseEntity<CustomResponse> deleteEmployee(@PathVariable String employeeId) throws Exception {
-		return new ResponseEntity<CustomResponse>(employeeService.deleteEmployee(employeeId), HttpStatus.OK);
+		CustomResponse customResponse = new CustomResponse();
+		customResponse.setEmployee(employeeService.getEmployee(employeeId));
+		customResponse.setMessage(AppConstants.SUCCESS_MSG);
+		employeeService.deleteEmployee(employeeId);
+		return new ResponseEntity<CustomResponse>(customResponse, HttpStatus.OK);
 	}
 }
